@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+    {% if chart_data %}
+    <div id="chart" class= "mt-1"></div>
+    <script>
+        const c_data = {{ chart_data|tojson|safe }};
+        let chart_x = [];
+        let chart_y = []
+        for (let i = 0; i < c_data.length; i++) {
+            chart_x.push(c_data[i].date);
+            chart_y.push(c_data[i].close);
+        };
+        const data = [
+        {
+            x: chart_x,
+            y: chart_y,
+            type: 'scatter'
+        }
+        ];
+        const layout = {
+            title: 'Historical Close Prices for {{ data['symbol'] }}',
+            yaxis: {title: 'Price, USD'},
+            margin: {
+                t: 50,
+                b: 50
+            }
+        };
+
+        Plotly.newPlot('chart', data, layout);
+    </script>
+
+    {% endif %}
+    {% if data %}
+        <p class="quote-lookup mb-5">A share of {{ data['name'] }} ({{ data['symbol'] }}) costs {{ data['price']|usd }}.</p>
+    {% endif %}
+    <form action="/quote" method="post">
+        <div class="row g-4 d-flex justify-content-center">
+            <div class="col-auto">
+                <div class="mb-3">
+                    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="symbol" name="symbol" placeholder="Symbol" type="text">
+                </div>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit">Quote</button>
+            </div>
+
+        </div>
+
+    </form>
+{% endblock %}

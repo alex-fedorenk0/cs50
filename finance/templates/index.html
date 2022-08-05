@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+    <!-- {% if alert == 'bought' %}
+    <div class="alert alert-primary mb-0 text-center" role="alert">Shares bought successfully!</div>
+    {% elif alert == 'sold' %}
+    <div class="alert alert-primary mb-0 text-center" role="alert">Shares sold successfully!</div>
+    {% endif %} -->
+    <main class="container py-5 text-center">
+        <table class="table table-striped">
+            <thead>
+                <th class="text-start">Symbol</th>
+                <th class="text-start">Name</th>
+                <th class="text-end">Shares</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">Total</th>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td class="text-start">{{ row['symbol'] }}</td>
+                    <td class="text-start">{{ row['name'] }}</td>
+                    <td class="text-end">{{ row['num_shares'] }}</td>
+                    <td class="text-end">{{ row['price'] | usd }}</td>
+                    <td class="text-end">{{ row['total'] | usd }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-end fw-bold border-0" colspan="4">Balance</td>
+                    <td class="text-end border-0">{{ balance | usd }}</td>
+                </tr>
+                <tr>
+                    <td class="text-end fw-bold border-0" colspan="4">Total</td>
+                    <td class="text-end border-0">{{ total | usd }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </main>
+
+
+{% endblock %}
